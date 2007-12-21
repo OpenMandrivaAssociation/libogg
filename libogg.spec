@@ -13,6 +13,7 @@ URL: http://www.xiph.org/
 Source:	http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.bz2
 Patch0: libogg-fix-optflags.patch
 Patch1: libogg-1.0-lib64.patch
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: autoconf2.5
 
 %description
