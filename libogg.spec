@@ -5,7 +5,7 @@
 Name: %{name}
 Summary: Ogg Bitstream Library
 Version: %{version}
-Release: %mkrel 3
+Release: %mkrel 4
 Group: System/Libraries
 License: BSD
 URL: http://www.xiph.org/
