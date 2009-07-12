@@ -5,7 +5,7 @@
 Summary:	Ogg Bitstream Library
 Name:		libogg
 Version:	1.1.4
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		System/Libraries
 License:	BSD
 URL:		http://www.xiph.org/
@@ -31,7 +31,7 @@ Summary:	Headers for developing programs that will use %{name}
 Group:		Development/C
 Requires:	%{libname} = %{version}-%{release}
 Provides:	libogg-devel = %{version}-%{release}
-Obsoletes:	%{mklibname ogg 0}
+Obsoletes:	%{mklibname ogg 0 -d}
 
 %description -n %{develname}
 This package contains the headers that programmers will need to develop
