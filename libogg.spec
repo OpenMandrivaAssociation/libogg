@@ -1,39 +1,36 @@
-%define name libogg
-%define version 1.1.4
-%define lib_name %mklibname ogg 0
+%define major 0
+%define libname %mklibname ogg %{major}
 %define develname %mklibname ogg -d
 
-Name: %{name}
-Summary: Ogg Bitstream Library
-Version: %{version}
-Release: %mkrel 1
-Group: System/Libraries
-License: BSD
-URL: http://www.xiph.org/
-Source:	http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.bz2
-Patch0: libogg-fix-optflags.patch
-Patch1: libogg-1.0-lib64.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires: autoconf2.5
+Summary:	Ogg Bitstream Library
+Name:		libogg
+Version:	1.1.4
+Release:	%mkrel 1
+Group:		System/Libraries
+License:	BSD
+URL:		http://www.xiph.org/
+Source:		http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.bz2
+Patch1:		libogg-1.0-lib64.patch
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Libogg is a library for manipulating ogg bitstreams. It handles
 both making ogg bitstreams and getting packets from ogg bitstreams.
 
-%package -n %{lib_name}
-Summary: Main library for %{name}
-Group: System/Libraries
-Provides: %{name} = %{version}-%{release}
+%package -n %{libname}
+Summary:	Main library for %{name}
+Group:		System/Libraries
+Provides:	%{name} = %{version}-%{release}
 
-%description -n %{lib_name}
+%description -n %{libname}
 This package contains the library needed to run programs dynamically
 linked with %{name}.
 
 %package -n %{develname}
-Summary: Headers for developing programs that will use %{name}
-Group: Development/C
-Requires: %{lib_name} = %{version}-%{release}
-Provides: libogg-devel = %{version}-%{release}
+Summary:	Headers for developing programs that will use %{name}
+Group:		Development/C
+Requires:	%{libname} = %{version}-%{release}
+Provides:	libogg-devel = %{version}-%{release}
 Obsoletes:	%{mklibname ogg 0}
 
 %description -n %{develname}
@@ -42,51 +39,39 @@ applications which will use %{name}.
 
 %prep
 %setup -q
-%patch0 -p0
-%patch1 -p1 -b .lib64
 
 %build
-autoconf
-%if %mdkversion <= 1000
-%define __libtoolize true
-%endif
+sed -i "s/-O20/$CFLAGS/" configure
 %configure2_5x
-make
+%make
 
 %install
-rm -rf $RPM_BUILD_ROOT
-%makeinstall
+rm -rf %{buildroot}
+%makeinstall_std
 
-%clean 
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}%{_docdir}/libogg-%{version}/
+
+%clean
+rm -rf %{buildroot}
 
 %if %mdkversion < 200900
-%post -n %{lib_name} -p /sbin/ldconfig
+%post -n %{libname} -p /sbin/ldconfig
 %endif
 
 %if %mdkversion < 200900
-%postun -n %{lib_name} -p /sbin/ldconfig
+%postun -n %{libname} -p /sbin/ldconfig
 %endif
 
-%files -n %{lib_name}
+%files -n %{libname}
 %defattr(-,root,root)
-%doc AUTHORS CHANGES COPYING README
-%{_libdir}/*.so.*
+%doc AUTHORS CHANGES README
+%{_libdir}/*.so.%{major}*
 
 %files -n %{develname}
 %defattr(-,root,root)
-%doc doc/*.html doc/*.png
-%dir %_docdir/libogg-%version/
-%doc %_docdir/libogg-%version/*.html
-%doc %_docdir/libogg-%version/*.png
-%doc %_docdir/libogg-%version/*.txt
-%dir %_docdir/libogg-%version/ogg/
-%doc %_docdir/libogg-%version/ogg/*.html
-%doc %_docdir/libogg-%version/ogg/*.css
+%doc doc/*.html doc/*.png doc/*.txt
 %{_includedir}/ogg
 %{_libdir}/*.*a
 %{_libdir}/*.so
 %{_datadir}/aclocal/*
 %{_libdir}/pkgconfig/*
-
-
