@@ -1,11 +1,11 @@
 %define name libogg
-%define version 1.1.3
+%define version 1.1.4
 %define lib_name %mklibname ogg 0
 
 Name: %{name}
 Summary: Ogg Bitstream Library
 Version: %{version}
-Release: %mkrel 4
+Release: %mkrel 1
 Group: System/Libraries
 License: BSD
 URL: http://www.xiph.org/
