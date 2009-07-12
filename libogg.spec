@@ -1,6 +1,7 @@
 %define name libogg
 %define version 1.1.4
 %define lib_name %mklibname ogg 0
+%define develname %mklibname ogg -d
 
 Name: %{name}
 Summary: Ogg Bitstream Library
@@ -28,13 +29,14 @@ Provides: %{name} = %{version}-%{release}
 This package contains the library needed to run programs dynamically
 linked with %{name}.
 
-%package -n %{lib_name}-devel
+%package -n %{develname}
 Summary: Headers for developing programs that will use %{name}
 Group: Development/C
 Requires: %{lib_name} = %{version}-%{release}
 Provides: libogg-devel = %{version}-%{release}
+Obsoletes:	%{mklibname ogg 0}
 
-%description -n %{lib_name}-devel
+%description -n %{develname}
 This package contains the headers that programmers will need to develop
 applications which will use %{name}.
 
@@ -71,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS CHANGES COPYING README
 %{_libdir}/*.so.*
 
-%files -n %{lib_name}-devel
+%files -n %{develname}
 %defattr(-,root,root)
 %doc doc/*.html doc/*.png
 %dir %_docdir/libogg-%version/
