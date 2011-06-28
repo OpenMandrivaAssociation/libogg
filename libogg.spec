@@ -1,6 +1,7 @@
 %define major 0
 %define libname %mklibname ogg %{major}
 %define develname %mklibname ogg -d
+%define staticname %mklibname ogg -sd
 
 Summary:	Ogg Bitstream Library
 Name:		libogg
@@ -37,6 +38,15 @@ Obsoletes:	%{mklibname ogg 0 -d}
 This package contains the headers that programmers will need to develop
 applications which will use %{name}.
 
+%package -n %{staticname}
+Summary: Static library for %{name}
+Group: Development/C
+Requires: %{develname} = %{version}-%{release}
+Provides: libogg-static-devel = %{version}-%{release}
+
+%description -n %{staticname}
+This package contains the static library for %name.
+
 %prep
 %setup -q
 
@@ -71,7 +81,11 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc doc/*.html doc/*.png doc/*.txt
 %{_includedir}/ogg
-%{_libdir}/*.*a
+%{_libdir}/*.la
 %{_libdir}/*.so
 %{_datadir}/aclocal/*
 %{_libdir}/pkgconfig/*
+
+%files -n %{staticname}
+%defattr(-,root,root)
+%{_libdir}/*.a
