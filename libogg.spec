@@ -1,12 +1,11 @@
 %define major 0
 %define libname %mklibname ogg %{major}
 %define develname %mklibname ogg -d
-%define staticname %mklibname ogg -sd
 
 Summary:	Ogg Bitstream Library
 Name:		libogg
 Version:	1.3.0
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		System/Libraries
 License:	BSD
 URL:		http://www.xiph.org/
@@ -38,21 +37,14 @@ Obsoletes:	%{mklibname ogg 0 -d}
 This package contains the headers that programmers will need to develop
 applications which will use %{name}.
 
-%package -n %{staticname}
-Summary: Static library for %{name}
-Group: Development/C
-Requires: %{develname} = %{version}-%{release}
-Provides: libogg-static-devel = %{version}-%{release}
-
-%description -n %{staticname}
-This package contains the static library for %name.
-
 %prep
 %setup -q
 
 %build
 sed -i "s/-O20/$CFLAGS/" configure
-%configure2_5x
+%configure2_5x \
+	--disable-static
+
 %make
 
 %install
@@ -60,6 +52,8 @@ rm -rf %{buildroot}
 %makeinstall_std
 
 rm -rf %{buildroot}%{_docdir}/libogg-%{version}/
+
+%multiarch_includes %{buildroot}%{_includedir}/ogg/config_types.h
 
 %clean
 rm -rf %{buildroot}
@@ -80,12 +74,9 @@ rm -rf %{buildroot}
 %files -n %{develname}
 %defattr(-,root,root)
 %doc doc/*.html doc/*.png doc/*.txt
-%{_includedir}/ogg
-%{_libdir}/*.la
+%dir %{multiarch_includedir}/ogg
+%{multiarch_includedir}/ogg/config_types.h
+%{_includedir}/ogg/*.h
 %{_libdir}/*.so
 %{_datadir}/aclocal/*
 %{_libdir}/pkgconfig/*
-
-%files -n %{staticname}
-%defattr(-,root,root)
-%{_libdir}/*.a
