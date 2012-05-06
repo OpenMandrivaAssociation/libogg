@@ -5,13 +5,12 @@
 Summary:	Ogg Bitstream Library
 Name:		libogg
 Version:	1.3.0
-Release:	%mkrel 2
+Release:	3
 Group:		System/Libraries
 License:	BSD
 URL:		http://www.xiph.org/
-Source:		http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.xz
+Source0:	http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.xz
 Patch1:		libogg-1.0-lib64.patch
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Libogg is a library for manipulating ogg bitstreams. It handles
@@ -48,31 +47,17 @@ sed -i "s/-O20/$CFLAGS/" configure
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 
 rm -rf %{buildroot}%{_docdir}/libogg-%{version}/
 
 %multiarch_includes %{buildroot}%{_includedir}/ogg/config_types.h
 
-%clean
-rm -rf %{buildroot}
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
 %files -n %{libname}
-%defattr(-,root,root)
 %doc AUTHORS CHANGES README
 %{_libdir}/*.so.%{major}*
 
 %files -n %{develname}
-%defattr(-,root,root)
 %doc doc/*.html doc/*.png doc/*.txt
 %dir %{multiarch_includedir}/ogg
 %{multiarch_includedir}/ogg/config_types.h
