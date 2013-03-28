@@ -9,7 +9,7 @@ Release:	3
 Group:		System/Libraries
 License:	BSD
 URL:		http://www.xiph.org/
-Source:		http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.xz
+Source0:	http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.xz
 Patch1:		libogg-1.0-lib64.patch
 
 %description
@@ -39,6 +39,9 @@ applications which will use %{name}.
 %setup -q
 
 %build
+#fix build with new automake
+sed -i -e 's,AM_CONFIG_HEADER,AC_CONFIG_HEADERS,g' configure.*
+autoreconf -fi
 sed -i "s/-O20/$CFLAGS/" configure
 %configure2_5x \
 	--disable-static
