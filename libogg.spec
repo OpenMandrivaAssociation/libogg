@@ -51,7 +51,7 @@ sed -i "s/-O20/$CFLAGS/" configure
 %install
 %makeinstall_std
 
-rm -rf %{buildroot}%{_docdir}/libogg-%{version}/
+rm -rf %{buildroot}%{_docdir}/libogg/
 
 %multiarch_includes %{buildroot}%{_includedir}/ogg/config_types.h
 
