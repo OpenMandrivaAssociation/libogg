@@ -1,11 +1,11 @@
-%define major	0
-%define libname	%mklibname ogg %{major}
-%define devname	%mklibname ogg -d
+%define major 0
+%define libname %mklibname ogg %{major}
+%define devname %mklibname ogg -d
 
 Summary:	Ogg Bitstream Library
 Name:		libogg
-Version:	1.3.1
-Release:	5
+Version:	1.3.2
+Release:	1
 Group:		System/Libraries
 License:	BSD
 Url:		http://www.xiph.org/
@@ -43,8 +43,7 @@ autoreconf -fi
 sed -i "s/-O20/$CFLAGS/" configure
 
 %build
-%configure2_5x \
-	--disable-static
+%configure
 
 %make
 
