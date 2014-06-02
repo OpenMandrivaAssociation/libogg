@@ -43,7 +43,7 @@ autoreconf -fi
 sed -i "s/-O20/$CFLAGS/" configure
 
 %build
-%configure
+%configure --disable-static
 
 %make
 
