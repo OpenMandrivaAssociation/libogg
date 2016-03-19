@@ -5,7 +5,7 @@
 Summary:	Ogg Bitstream Library
 Name:		libogg
 Version:	1.3.2
-Release:	6
+Release:	7
 Group:		System/Libraries
 License:	BSD
 Url:		http://www.xiph.org/
