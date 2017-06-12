@@ -5,7 +5,7 @@
 Summary:	Ogg Bitstream Library
 Name:		libogg
 Version:	1.3.2
-Release:	7
+Release:	8
 Group:		System/Libraries
 License:	BSD
 Url:		http://www.xiph.org/
@@ -52,16 +52,12 @@ sed -i "s/-O20/$CFLAGS/" configure
 
 rm -rf %{buildroot}%{_docdir}/libogg/
 
-%multiarch_includes %{buildroot}%{_includedir}/ogg/config_types.h
-
 %files -n %{libname}
 %{_libdir}/libogg.so.%{major}*
 
 %files -n %{devname}
 %doc AUTHORS CHANGES README
 %doc doc/*.html doc/*.png doc/*.txt
-%dir %{multiarch_includedir}/ogg
-%{multiarch_includedir}/ogg/config_types.h
 %{_includedir}/ogg/*.h
 %{_libdir}/*.so
 %{_datadir}/aclocal/*
