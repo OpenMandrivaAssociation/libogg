@@ -52,12 +52,20 @@ sed -i "s/-O20/$CFLAGS/" configure
 
 rm -rf %{buildroot}%{_docdir}/libogg/
 
+%if %{mdvver} <= 3000000
+%multiarch_includes %{buildroot}%{_includedir}/ogg/config_types.h
+%endif
+
 %files -n %{libname}
 %{_libdir}/libogg.so.%{major}*
 
 %files -n %{devname}
 %doc AUTHORS CHANGES
 %doc doc/*.html doc/*.png doc/*.txt
+%if %{mdvver} <= 3000000
+%dir %{multiarch_includedir}/ogg
+%{multiarch_includedir}/ogg/config_types.h
+%endif
 %{_includedir}/ogg/*.h
 %{_libdir}/*.so
 %{_datadir}/aclocal/*
