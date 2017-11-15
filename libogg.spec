@@ -56,7 +56,7 @@ rm -rf %{buildroot}%{_docdir}/libogg/
 %{_libdir}/libogg.so.%{major}*
 
 %files -n %{devname}
-%doc AUTHORS CHANGES README
+%doc AUTHORS CHANGES
 %doc doc/*.html doc/*.png doc/*.txt
 %{_includedir}/ogg/*.h
 %{_libdir}/*.so
