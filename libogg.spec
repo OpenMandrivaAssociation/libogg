@@ -5,7 +5,7 @@
 Summary:	Ogg Bitstream Library
 Name:		libogg
 Version:	1.3.3
-Release:	2
+Release:	3
 Group:		System/Libraries
 License:	BSD
 Url:		http://www.xiph.org/
@@ -50,6 +50,9 @@ sed -i "s/-O20/$CFLAGS/" configure
 %install
 %makeinstall_std
 
+# we don't want these
+find %{buildroot} -name '*.la' -delete
+
 rm -rf %{buildroot}%{_docdir}/libogg/
 
 %if %{mdvver} <= 3000000
@@ -70,4 +73,3 @@ rm -rf %{buildroot}%{_docdir}/libogg/
 %{_libdir}/*.so
 %{_datadir}/aclocal/*
 %{_libdir}/pkgconfig/*
-
