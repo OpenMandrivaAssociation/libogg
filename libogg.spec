@@ -15,7 +15,6 @@ Group:		System/Libraries
 License:	BSD
 Url:		http://www.xiph.org/
 Source0:	http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.xz
-Patch1:		libogg-1.0-lib64.patch
 
 %description
 Libogg is a library for manipulating ogg bitstreams. It handles
