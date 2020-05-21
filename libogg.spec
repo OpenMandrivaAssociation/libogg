@@ -19,7 +19,7 @@
 Summary:	Ogg Bitstream Library
 Name:		libogg
 Version:	1.3.4
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	BSD
 Url:		http://www.xiph.org/
@@ -68,9 +68,6 @@ applications which will use %{name}.
 
 %prep
 %autosetup -p1
-
-#fix build with new automake
-sed -i -e 's,AM_CONFIG_HEADER,AC_CONFIG_HEADERS,g' configure.*
 autoreconf -fi
 sed -i "s/-O20/$CFLAGS/" configure
 
