@@ -98,7 +98,7 @@ llvm-profdata merge --output=%{name}.profile *.profile.d
 ninja clean
 rm -rf pgo
 
-%undefine _vpath_builddir pgo
+%undefine _vpath_builddir
 
 CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
