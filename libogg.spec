@@ -76,6 +76,7 @@ export CONFIGURE_TOP="$(pwd)"
 %if %{with compat32}
 %cmake32 -DBUILD_SHARED_LIBS=ON -G Ninja
 cd ..
+%ninja_build -C build32
 %endif
 
 %if %{with pgo}
@@ -105,12 +106,9 @@ CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %endif
 %cmake -DBUILD_SHARED_LIBS=ON -G Ninja
+cd ..
 %ninja_build
 cd ..
-
-%if %{with compat32}
-%ninja_build -C build32
-%endif
 
 %install
 %if %{with compat32}
@@ -128,8 +126,9 @@ rm -rf %{buildroot}%{_docdir}/libogg/
 %doc doc/*.html doc/*.png doc/*.txt
 %{_includedir}/ogg/*.h
 %{_libdir}/*.so
-%{_datadir}/aclocal/*
 %{_libdir}/pkgconfig/*
+%dir %{_libdir}/cmake/Ogg
+%{_libdir}/cmake/Ogg/*.cmake
 
 %if %{with compat32}
 %files -n %{lib32name}
@@ -138,4 +137,6 @@ rm -rf %{buildroot}%{_docdir}/libogg/
 %files -n %{dev32name}
 %{_prefix}/lib/*.so
 %{_prefix}/lib/pkgconfig/*
+%dir %{_prefix}/lib/cmake/Ogg
+%{_prefix}/lib/cmake/Ogg/*.cmake
 %endif
