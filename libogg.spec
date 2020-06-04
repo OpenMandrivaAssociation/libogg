@@ -75,6 +75,7 @@ applications which will use %{name}.
 export CONFIGURE_TOP="$(pwd)"
 %if %{with compat32}
 %cmake32 -BUILD_SHARED_LIBS=ON -G Ninja
+cd ..
 %endif
 
 %if %{with pgo}
@@ -87,7 +88,7 @@ CXXFLAGS="%{optflags} -fprofile-instr-generate" \
 FFLAGS="$CFLAGS" \
 FCFLAGS="$CFLAGS" \
 LDFLAGS="%{ldflags} -fprofile-instr-generate" \
-%cmake  -BUILD_SHARED_LIBS=ON -G Ninja
+%cmake  -DBUILD_SHARED_LIBS=ON -G Ninja
 %ninja_build
 %ninja_test ||:
 
