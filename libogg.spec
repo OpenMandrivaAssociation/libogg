@@ -19,11 +19,13 @@
 Summary:	Ogg Bitstream Library
 Name:		libogg
 Version:	1.3.4
-Release:	2
+Release:	3
 Group:		System/Libraries
 License:	BSD
 Url:		http://www.xiph.org/
 Source0:	http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.xz
+BuildRequires:	cmake
+BuildRequires:	ninja
 
 %description
 Libogg is a library for manipulating ogg bitstreams. It handles
@@ -68,55 +70,51 @@ applications which will use %{name}.
 
 %prep
 %autosetup -p1
-autoreconf -fi
-sed -i "s/-O20/$CFLAGS/" configure
 
 %build
 export CONFIGURE_TOP="$(pwd)"
 %if %{with compat32}
-mkdir build32
-cd build32
-%configure32 --disable-static
+%cmake32 -DBUILD_SHARED_LIBS=ON -G Ninja
 cd ..
+%ninja_build -C build32
 %endif
 
-mkdir build
-cd build
 %if %{with pgo}
+%define _vpath_builddir pgo
+mkdir pgo
 export LLVM_PROFILE_FILE=%{name}-%p.profile.d
 export LD_LIBRARY_PATH="$(pwd)"
 CFLAGS="%{optflags} -fprofile-instr-generate" \
 CXXFLAGS="%{optflags} -fprofile-instr-generate" \
-FFLAGS="$CFLAGS_PGO" \
-FCFLAGS="$CFLAGS_PGO" \
+FFLAGS="$CFLAGS" \
+FCFLAGS="$CFLAGS" \
 LDFLAGS="%{ldflags} -fprofile-instr-generate" \
-%configure --disable-static
-%make_build
-make check
+%cmake -DBUILD_SHARED_LIBS=ON -G Ninja
+%ninja_build
+%ninja_test ||:
 
 unset LD_LIBRARY_PATH
 unset LLVM_PROFILE_FILE
 llvm-profdata merge --output=%{name}.profile *.profile.d
+ninja clean
+rm -rf pgo
 
-make clean
+%undefine _vpath_builddir
 
 CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %endif
-%configure --disable-static
-%make_build
+%cmake -DBUILD_SHARED_LIBS=ON -G Ninja
 cd ..
-
-%if %{with compat32}
-%make_build -C build32
-%endif
+%ninja_build
+cd ..
 
 %install
 %if %{with compat32}
-%make_install -C build32
+%ninja_install -C build32
 %endif
-%make_install -C build
+%ninja_install -C build
 
 rm -rf %{buildroot}%{_docdir}/libogg/
 
@@ -128,8 +126,9 @@ rm -rf %{buildroot}%{_docdir}/libogg/
 %doc doc/*.html doc/*.png doc/*.txt
 %{_includedir}/ogg/*.h
 %{_libdir}/*.so
-%{_datadir}/aclocal/*
 %{_libdir}/pkgconfig/*
+%dir %{_libdir}/cmake/Ogg
+%{_libdir}/cmake/Ogg/*.cmake
 
 %if %{with compat32}
 %files -n %{lib32name}
@@ -138,4 +137,6 @@ rm -rf %{buildroot}%{_docdir}/libogg/
 %files -n %{dev32name}
 %{_prefix}/lib/*.so
 %{_prefix}/lib/pkgconfig/*
+%dir %{_prefix}/lib/cmake/Ogg
+%{_prefix}/lib/cmake/Ogg/*.cmake
 %endif
