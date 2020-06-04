@@ -74,7 +74,7 @@ applications which will use %{name}.
 %build
 export CONFIGURE_TOP="$(pwd)"
 %if %{with compat32}
-%cmake32 -BUILD_SHARED_LIBS=ON -G Ninja
+%cmake32 -DBUILD_SHARED_LIBS=ON -G Ninja
 cd ..
 %endif
 
@@ -88,7 +88,7 @@ CXXFLAGS="%{optflags} -fprofile-instr-generate" \
 FFLAGS="$CFLAGS" \
 FCFLAGS="$CFLAGS" \
 LDFLAGS="%{ldflags} -fprofile-instr-generate" \
-%cmake  -DBUILD_SHARED_LIBS=ON -G Ninja
+%cmake -DBUILD_SHARED_LIBS=ON -G Ninja
 %ninja_build
 %ninja_test ||:
 
@@ -104,7 +104,7 @@ CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %endif
-%cmake  -BUILD_SHARED_LIBS=ON -G Ninja
+%cmake -DBUILD_SHARED_LIBS=ON -G Ninja
 %ninja_build
 cd ..
 
