@@ -70,10 +70,9 @@ applications which will use %{name}.
 
 %prep
 %autosetup -p1
-autoreconf -fi
-sed -i "s/-O20/$CFLAGS/" configure
 
 %build
+export CONFIGURE_TOP="$(pwd)"
 %if %{with compat32}
 %cmake32 -BUILD_SHARED_LIBS=ON -G Ninja
 %endif
