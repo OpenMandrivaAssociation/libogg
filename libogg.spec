@@ -95,9 +95,7 @@ LDFLAGS="%{ldflags} -fprofile-instr-generate" \
 unset LD_LIBRARY_PATH
 unset LLVM_PROFILE_FILE
 llvm-profdata merge --output=%{name}.profile *.profile.d
-cd pgo
 ninja clean
-cd -
 rm -rf pgo
 
 %undefine _vpath_builddir pgo
