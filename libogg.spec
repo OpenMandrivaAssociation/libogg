@@ -19,11 +19,13 @@
 Summary:	Ogg Bitstream Library
 Name:		libogg
 Version:	1.3.4
-Release:	2
+Release:	3
 Group:		System/Libraries
 License:	BSD
 Url:		http://www.xiph.org/
 Source0:	http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.xz
+BuildRequires:	cmake
+BuildRequires:	ninja
 
 %description
 Libogg is a library for manipulating ogg bitstreams. It handles
@@ -72,51 +74,51 @@ autoreconf -fi
 sed -i "s/-O20/$CFLAGS/" configure
 
 %build
-export CONFIGURE_TOP="$(pwd)"
 %if %{with compat32}
-mkdir build32
-cd build32
-%configure32 --disable-static
-cd ..
+%cmake32 -BUILD_SHARED_LIBS=ON -G Ninja
 %endif
 
-mkdir build
-cd build
 %if %{with pgo}
+%define _vpath_builddir pgo
+mkdir pgo
 export LLVM_PROFILE_FILE=%{name}-%p.profile.d
 export LD_LIBRARY_PATH="$(pwd)"
 CFLAGS="%{optflags} -fprofile-instr-generate" \
 CXXFLAGS="%{optflags} -fprofile-instr-generate" \
-FFLAGS="$CFLAGS_PGO" \
-FCFLAGS="$CFLAGS_PGO" \
+FFLAGS="$CFLAGS" \
+FCFLAGS="$CFLAGS" \
 LDFLAGS="%{ldflags} -fprofile-instr-generate" \
-%configure --disable-static
-%make_build
-make check
+%cmake  -BUILD_SHARED_LIBS=ON -G Ninja
+%ninja_build
+%ninja_test ||:
 
 unset LD_LIBRARY_PATH
 unset LLVM_PROFILE_FILE
 llvm-profdata merge --output=%{name}.profile *.profile.d
+cd pgo
+ninja clean
+cd -
+rm -rf pgo
 
-make clean
+%undefine _vpath_builddir pgo
 
 CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %endif
-%configure --disable-static
-%make_build
+%cmake  -BUILD_SHARED_LIBS=ON -G Ninja
+%ninja_build
 cd ..
 
 %if %{with compat32}
-%make_build -C build32
+%ninja_build -C build32
 %endif
 
 %install
 %if %{with compat32}
-%make_install -C build32
+%ninja_install -C build32
 %endif
-%make_install -C build
+%ninja_install -C build
 
 rm -rf %{buildroot}%{_docdir}/libogg/
 
