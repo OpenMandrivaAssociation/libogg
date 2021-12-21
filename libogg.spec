@@ -19,7 +19,7 @@
 Summary:	Ogg Bitstream Library
 Name:		libogg
 Version:	1.3.5
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	BSD
 Url:		http://www.xiph.org/
@@ -82,28 +82,27 @@ cd ..
 %if %{with pgo}
 %define _vpath_builddir pgo
 mkdir pgo
-export LLVM_PROFILE_FILE=%{name}-%p.profile.d
 export LD_LIBRARY_PATH="$(pwd)"
-CFLAGS="%{optflags} -fprofile-instr-generate" \
-CXXFLAGS="%{optflags} -fprofile-instr-generate" \
-FFLAGS="$CFLAGS" \
-FCFLAGS="$CFLAGS" \
-LDFLAGS="%{ldflags} -fprofile-instr-generate" \
+
+CFLAGS="%{optflags} -fprofile-generate" \
+CXXFLAGS="%{optflags} -fprofile-generate" \
+LDFLAGS="%{build_ldflags} -fprofile-generate" \
 %cmake -DBUILD_SHARED_LIBS=ON -G Ninja
 %ninja_build
 %ninja_test ||:
 
 unset LD_LIBRARY_PATH
-unset LLVM_PROFILE_FILE
-llvm-profdata merge --output=%{name}.profile *.profile.d
+llvm-profdata merge --output=%{name}-llvm.profdata $(find . -name "*.profraw" -type f)
+PROFDATA="$(realpath %{name}-llvm.profdata)"
+rm -f *.profraw
 ninja clean
 rm -rf pgo
 
 %undefine _vpath_builddir
 
-CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
-CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
-LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+CFLAGS="%{optflags} -fprofile-use=$PROFDATA" \
+CXXFLAGS="%{optflags} -fprofile-use=$PROFDATA" \
+LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA" \
 %endif
 %cmake -DBUILD_SHARED_LIBS=ON -G Ninja
 cd ..
