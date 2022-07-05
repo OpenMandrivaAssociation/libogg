@@ -19,7 +19,7 @@
 Summary:	Ogg Bitstream Library
 Name:		libogg
 Version:	1.3.5
-Release:	2
+Release:	3
 Group:		System/Libraries
 License:	BSD
 Url:		http://www.xiph.org/
@@ -52,6 +52,8 @@ applications which will use %{name}.
 %package -n %{lib32name}
 Summary:	Main library for %{name} (32-bit)
 Group:		System/Libraries
+BuildRequires:	libc6
+Requires:	libc6
 
 %description -n %{lib32name}
 This package contains the library needed to run programs dynamically
