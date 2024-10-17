@@ -22,7 +22,7 @@ Version:	1.3.5
 Release:	4
 Group:		System/Libraries
 License:	BSD
-Url:		http://www.xiph.org/
+Url:		https://www.xiph.org/
 Source0:	http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.xz
 BuildRequires:	cmake
 BuildRequires:	ninja
