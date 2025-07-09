@@ -18,12 +18,12 @@
 
 Summary:	Ogg Bitstream Library
 Name:		libogg
-Version:	1.3.5
-Release:	4
+Version:	1.3.6
+Release:	1
 Group:		System/Libraries
 License:	BSD
 Url:		https://www.xiph.org/
-Source0:	http://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.xz
+Source0:	https://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.xz
 BuildRequires:	cmake
 BuildRequires:	ninja
 
